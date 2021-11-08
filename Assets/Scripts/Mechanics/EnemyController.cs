@@ -17,7 +17,7 @@ namespace Platformer.Mechanics
 
         internal PatrolPath.Mover mover;
         internal AnimationController control;
-        internal Collider2D _collider;
+        public Collider2D _collider { get; private set; }
         internal AudioSource _audio;
         SpriteRenderer spriteRenderer;
 
@@ -36,6 +36,7 @@ namespace Platformer.Mechanics
             var player = collision.gameObject.GetComponent<PlayerController>();
             if (player != null)
             {
+                
                 var ev = Schedule<PlayerEnemyCollision>();
                 ev.player = player;
                 ev.enemy = this;

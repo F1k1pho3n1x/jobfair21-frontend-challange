@@ -1,4 +1,5 @@
 using Platformer.Gameplay;
+using UnityEngine;
 
 namespace Platformer.Model
 {
@@ -7,16 +8,38 @@ namespace Platformer.Model
         public static GameDatabase Instance = new GameDatabase();
         public UserData CurrentUser { get; private set; }
 
+        public ParticleSystem particleSystem;
+
         private GameDatabase()
         {
             CurrentUser = new UserData();
             PlayerTokenCollision.OnExecute += PlayerCollectedToken;
             EnemyDeath.OnExecute += PlayerKilledEnemy;
+            
         }
 
         private void PlayerKilledEnemy(EnemyDeath enemyDeath)
         {
-            CurrentUser.EnemiesKilled++;
+            string enemyName = enemyDeath.enemy._collider.name;
+            string enemyCategory = enemyName.Split('_')[0];
+
+            if(particleSystem == null)
+                particleSystem = GameObject.Find("ConfettiCelebration").GetComponent<ParticleSystem>();
+            particleSystem.transform.position = enemyDeath.enemy._collider.transform.position;
+            particleSystem.Play();
+
+            switch (enemyCategory)
+            {
+                case "PurpleEnemy":
+                    CurrentUser.EnemiesKilled += 2;
+                    break;
+                case "AlienEnemy":
+                    CurrentUser.EnemiesKilled += 5;
+                    break;                    
+                default:
+                    CurrentUser.EnemiesKilled += 1;
+                    break;
+            }            
         }
 
         private void PlayerCollectedToken(PlayerTokenCollision playerTokenCollision)
@@ -46,8 +69,7 @@ namespace Platformer.Model
             public string Username = "";
             public int Tokens { get; internal set; }
             public int EnemiesKilled { get; internal set; }
-            public int Score => Tokens * 10 + EnemiesKilled * 100;
-            
+            public int Score => Tokens * 10 + EnemiesKilled * 100;            
         }
     }
 }

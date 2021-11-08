@@ -26,11 +26,23 @@ namespace Platformer.UI
         {
             blurredBackground.Show();
             gameObject.SetActive(true);
+
+            if (won)
+            {
+                lblTitle.text = "LEVEL WON";
+                lblTitle.color = titleWonColor;
+            }
+            else
+            {
+                lblTitle.text = "LEVEL LOST";
+                lblTitle.color = titleLostColor;
+            }
             
             lblTokens.text = GameDatabase.Instance.CurrentUser.Tokens.ToString();
             lblEnemiesKilled.text = GameDatabase.Instance.CurrentUser.EnemiesKilled.ToString();
             lblUsername.text = GameDatabase.Instance.CurrentUser.Username;
             lblScore.text = GameDatabase.Instance.CurrentUser.Score.ToString();
+
         }
 
         #region Event Handlers
@@ -43,6 +55,7 @@ namespace Platformer.UI
         public void BtnReplayClicked()
         {
             SceneManager.LoadScene("Assets/Scenes/LevelScene.unity", LoadSceneMode.Single);
+            //Time.timeScale = 1;
         }
 
         #endregion Event Handlers

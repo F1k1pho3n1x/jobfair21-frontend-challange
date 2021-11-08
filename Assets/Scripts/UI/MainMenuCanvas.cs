@@ -18,6 +18,7 @@ namespace Platformer.UI
         {
             if (_instance == null) _instance = this;
 
+            btnPlay.interactable = false;
             inputUsername.onValueChanged.AddListener(OnUsernameInputChanged);
             inputUsername.text = GameDatabase.Instance.CurrentUser.Username;
         }
@@ -32,6 +33,18 @@ namespace Platformer.UI
         private void OnUsernameInputChanged(string newName)
         {
             GameDatabase.Instance.SetUsername(newName);
+        }
+
+        public void ValueCheck()
+        {
+            if(inputUsername.text == "")
+            {
+                btnPlay.interactable = false;
+            }
+            else
+            {
+                btnPlay.interactable = true;
+            }
         }
 
         public void BtnPlayClicked()

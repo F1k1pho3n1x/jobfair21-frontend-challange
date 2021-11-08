@@ -25,6 +25,9 @@ namespace Platformer.UI
 
         public void BtnResumeClicked()
         {
+            LevelCanvas.InvertGamePaused();
+            Time.timeScale = 1;
+            Hide();
         }
 
         public void BtnMainMenuClicked()

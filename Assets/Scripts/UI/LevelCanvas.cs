@@ -19,15 +19,21 @@ namespace Platformer.UI
         
         private static LevelCanvas _instance;
         public static LevelCanvas Instance => _instance;
+        public static bool isGamePaused { get; private set; }
 
         void Awake()
         {
             if (_instance == null) _instance = this;
 
+            lblUsername.text = GameDatabase.Instance.CurrentUser.Username;
+            isGamePaused = false;
+            Time.timeScale = 1;
+
             PlayerDeath.OnExecute += PlayerDiedCallback;
             PlayerEnteredVictoryZone.OnExecute += PlayerWonCallback;
             
             GameDatabase.Instance.ResetScore();
+
         }
 
         private void OnDestroy()
@@ -41,6 +47,19 @@ namespace Platformer.UI
             lblTokens.text = GameDatabase.Instance.CurrentUser.Tokens.ToString();
             lblEnemiesKilled.text = GameDatabase.Instance.CurrentUser.EnemiesKilled.ToString();
         }
+
+        public static void InvertGamePaused()
+        {
+            if (isGamePaused)
+            {
+                isGamePaused = false;
+            }
+            else
+            {
+                isGamePaused = true;
+            }
+        }
+
 
         #region Event Handlers
         
@@ -56,6 +75,8 @@ namespace Platformer.UI
 
         public void BtnPauseClicked()
         {
+            InvertGamePaused();
+            Time.timeScale = 0;
             pauseMenu.Show();
         }
 
